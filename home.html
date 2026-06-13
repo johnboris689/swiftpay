@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwiftPay</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+background:linear-gradient(135deg,#8B4513,#A0522D);
+color:white;
+padding:20px;
+}
+
+.logo{
+width:120px;
+height:120px;
+background:white;
+color:#8B4513;
+border-radius:30px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:40px;
+font-weight:bold;
+margin-bottom:20px;
+}
+
+.buttons{
+display:flex;
+gap:15px;
+margin-top:20px;
+}
+
+.btn{
+padding:15px 25px;
+border-radius:15px;
+text-decoration:none;
+font-weight:bold;
+border:none;
+cursor:pointer;
+}
+
+.btn-primary{
+background:white;
+color:#8B4513;
+}
+
+.btn-secondary{
+background:transparent;
+border:2px solid white;
+color:white;
+}
+
+.btn-install{
+background:white;
+color:#8B4513;
+margin-top:20px;
+}
+</style>
+
+</head>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8B4513">
+
+<link rel="icon" href="assets/images/icon-192.png">
+<link rel="apple-touch-icon" href="assets/images/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<button id="installBtn" style="display:none;">
+Install SwiftPay
+</button>
+
+<body>
+
+<div class="hero">
+
+<div class="logo">SP</div>
+
+<h1>SWIFTPAY</h1>
+
+<p>Fast, Secure and Reliable Digital Banking</p>
+
+<div class="buttons">
+
+<a href="pages/pin.html" class="btn btn-primary">
+Login with PIN
+</a>
+
+<a href="pages/register.html" class="btn btn-secondary">
+Register
+</a>
+
+</div>
+
+<button id="installBtn" class="btn btn-install" style="display:none;">
+Install SwiftPay App
+</button>
+
+</div>
+
+<script>
+
+if ("serviceWorker" in navigator) {
+navigator.serviceWorker.register("./service-worker.js");
+}
+
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+
+e.preventDefault();
+
+deferredPrompt = e;
+
+document.getElementById("installBtn").style.display = "block";
+
+});
+
+document.getElementById("installBtn").addEventListener("click", async () => {
+
+if (!deferredPrompt) return;
+
+deferredPrompt.prompt();
+
+deferredPrompt = null;
+
+});
+
+</script>
+
+<script>
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  document.getElementById("installBtn").style.display = "block";
+});
+
+document.getElementById("installBtn").addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+  deferredPrompt = null;
+});
+</script>
+
+</body>
+</html>
