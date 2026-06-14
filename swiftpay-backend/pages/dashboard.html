@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SwiftPay Dashboard</title>
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#f4fbff;
+}
+
+/* TOP BAR */
+.topbar{
+  background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+  padding:20px;
+  color:white;
+  border-bottom-left-radius:25px;
+  border-bottom-right-radius:25px;
+}
+
+.topbar h2{
+  margin:0;
+}
+
+/* CONTAINER */
+.container{
+  padding:15px;
+}
+
+/* BALANCE CARD */
+.balanceCard{
+  background:white;
+  padding:20px;
+  border-radius:18px;
+  margin-top:-30px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.balance{
+  font-size:32px;
+  font-weight:900;
+  color:#0ea5e9;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-top:15px;
+}
+
+.grid div{
+  background:white;
+  padding:12px;
+  border-radius:12px;
+  text-align:center;
+  font-size:12px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* TRANSACTIONS */
+.card{
+  background:white;
+  padding:15px;
+  border-radius:15px;
+  margin-top:15px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+.small{
+  font-size:12px;
+  color:gray;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <h2>SwiftPay</h2>
+  <p>Welcome back 👋</p>
+</div>
+
+<div class="container">
+
+  <div class="balanceCard">
+    <p class="small">Available Balance</p>
+    <div class="balance" id="balance">₦0</div>
+    <p id="account">Account loading...</p>
+  </div>
+
+  <div class="grid">
+    <div onclick="go('bpc')">BPC</div>
+    <div onclick="go('airtime')">Airtime</div>
+    <div onclick="go('data')">Data</div>
+    <div onclick="go('withdraw')">Withdraw</div>
+  </div>
+
+  <div class="card">
+
+<div class="card">
+  <h3>Recent Transactions</h3>
+  <div id="txns"></div>
+</div>
+
+<script>
+async function loadTx(){
+  const token = localStorage.getItem("token");
+
+  const res = await fetch("/api/transactions",{
+    headers:{Authorization:token}
+  });
+
+  if(!res.ok) return;
+
+  const data = await res.json();
+
+  txns.innerHTML = data.slice(0,5).map(t=>`
+    <div style="padding:10px;border-bottom:1px solid #eee">
+      <b>${t.type}</b><br>
+      <small>${new Date(t.date).toLocaleString()}</small>
+    </div>
+  `).join("");
+}
+
+loadTx();
+</script>
+

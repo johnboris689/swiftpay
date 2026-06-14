@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SwiftPay Withdrawal</title>
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#f4fbff;
+}
+
+.header{
+  background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+  padding:20px;
+  color:white;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.container{
+  padding:15px;
+}
+
+.card{
+  background:white;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.05);
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  font-size:14px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  margin-top:15px;
+  border:none;
+  border-radius:12px;
+  font-weight:bold;
+  color:white;
+  background:#0ea5e9;
+}
+
+.link{
+  margin-top:15px;
+  display:block;
+  text-align:center;
+  color:#0ea5e9;
+  font-weight:bold;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+Transfer To Bank
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Bank Details</h2>
+
+<input placeholder="Account Name">
+<input placeholder="Account Number (10 digits)">
+
+<select>
+<option>Select Bank</option>
+<option>Access Bank</option>
+<option>Citibank Nigeria</option>
+<option>Ecobank Nigeria</option>
+<option>Fidelity Bank</option>
+<option>First Bank of Nigeria</option>
+<option>First City Monument Bank (FCMB)</option>
+<option>Globus Bank</option>
+<option>Guaranty Trust Bank (GTB)</option>
+<option>Heritage Bank</option>
+<option>Keystone Bank</option>
+<option>Polaris Bank</option>
+<option>Providus Bank</option>
+<option>Stanbic IBTC Bank</option>
+<option>Standard Chartered Bank</option>
+<option>Sterling Bank</option>
+<option>Union Bank of Nigeria</option>
+<option>United Bank For Africa (UBA)</option>
+<option>Unity Bank</option>
+<option>Wema Bank</option>
+<option>Zenith Bank</option>
+<option>Opay</option>
+<option>PalmPay</option>
+<option>Kuda Bank</option>
+<option>Moniepoint Microfinance Bank</option>
+</select>
+
+<input placeholder="Amount">
+<input placeholder="BPC CODE (Buy BPC)">
+
+<a class="link" onclick="goBPC()">Buy BPC code</a>
+
+<p><b>Available Balance: ₦200,000</b></p>
+
+<button onclick="submit()">Submit</button>
+
+</div>
+
+</div>
+
+<script>
+function goBPC(){
+  window.location="bpc/index.html";
+}
+
+function submit(){
+  alert("Withdrawal submitted successfully");
+}
+</script>
+
+<script src="notify.js"></script><script src="nav.js"></script></body>
+</html>

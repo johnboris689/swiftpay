@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SwiftPay BPC</title>
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+
+.card{
+  width:90%;
+  max-width:420px;
+  background:white;
+  padding:22px;
+  border-radius:18px;
+}
+
+h2{color:#0ea5e9}
+
+input,button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+}
+
+button{
+  background:#0ea5e9;
+  color:white;
+  border:none;
+  border-radius:10px;
+}
+
+.price{
+  font-weight:900;
+  font-size:22px;
+  color:#0ea5e9;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>SwiftPay BPC</h2>
+
+<div class="price">₦10,000 (Fixed)</div>
+
+<input id="name" placeholder="Full Name">
+<input id="email" placeholder="Email">
+
+<button onclick="createOrder()">Pay</button>
+</div>
+
+<script>
+const API="/api";
+const token=localStorage.getItem("token");
+
+if(!token){
+  window.location="../login.html";
+}
+
+async function createOrder(){
+
+  const res = await fetch(API+"/bpc/create",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":token
+    },
+    body:JSON.stringify({
+      name:name.value,
+      email:email.value
+    })
+  });
+
+  const data = await res.json();
+
+  if(res.ok){
+    sessionStorage.setItem("orderId",data.id);
+    window.location="countdown.html";
+  }else{
+    alert("Failed to create order");
+  }
+}
+</script>
+
+</body>
+</html>

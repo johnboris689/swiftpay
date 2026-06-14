@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Processing</title>
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#0ea5e9;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  text-align:center;
+}
+</style>
+</head>
+<body>
+
+<div>
+<h1>Processing Payment</h1>
+<h2 id="t">10</h2>
+</div>
+
+<script>
+let t=10;
+
+const orderId=sessionStorage.getItem("orderId");
+
+setInterval(()=>{
+  t--;
+  document.getElementById("t").innerText=t;
+
+  if(t<=0){
+    window.location="bank.html";
+  }
+},1000);
+</script>
+
+</body>
+</html>

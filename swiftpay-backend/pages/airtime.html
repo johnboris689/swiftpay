@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SwiftPay - Buy Airtime</title>
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#f4fbff;
+}
+
+.header{
+  background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+  color:white;
+  padding:20px;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.container{
+  padding:15px;
+}
+
+.card{
+  background:white;
+  padding:15px;
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:10px;
+  border:1px solid #ddd;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  margin-top:15px;
+  border:none;
+  border-radius:12px;
+  background:#0ea5e9;
+  color:white;
+  font-weight:bold;
+}
+
+.balance{
+  margin-top:10px;
+  font-weight:bold;
+  font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Buy Airtime</div>
+
+<div class="container">
+
+<div class="card">
+
+<p>Select Network</p>
+<select>
+<option>MTN</option>
+<option>Airtel</option>
+<option>Glo</option>
+<option>9mobile</option>
+</select>
+
+<input placeholder="Phone Number">
+<input placeholder="Amount">
+<input placeholder="BPC CODE">
+
+<div class="balance">Available Balance: ₦200,000</div>
+
+<button>Purchase Airtime</button>
+
+</div>
+
+</div>
+
+<script src="notify.js"></script><script src="nav.js"></script></body>
+</html>

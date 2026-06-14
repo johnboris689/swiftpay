@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bank Details</title>
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#f4fbff;
+  padding:20px;
+}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:15px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  background:#0ea5e9;
+  color:white;
+  border:none;
+  border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>Transfer Details</h2>
+
+<p><b>Bank:</b> Moniepoint</p>
+<p><b>Account:</b> 5000474256</p>
+<p><b>Name:</b> David John Mbaya</p>
+
+<button onclick="copy()">Copy Details</button>
+<button onclick="confirmPay()">I have made this transfer</button>
+</div>
+
+<script>
+const API="/api";
+const token=localStorage.getItem("token");
+const orderId=sessionStorage.getItem("orderId");
+
+function copy(){
+  navigator.clipboard.writeText(
+    "Bank: Moniepoint\nAccount: 5000474256\nName: David John Mbaya"
+  );
+  alert("Copied");
+}
+
+async function confirmPay(){
+
+  await fetch(API+"/bpc/update",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":token
+    },
+    body:JSON.stringify({
+      orderId:Number(orderId),
+      status:"awaiting_confirmation",
+      step:3
+    })
+  });
+
+  alert("Payment submitted successfully");
+  window.location="../dashboard.html";
+}
+</script>
+
+</body>
+</html>

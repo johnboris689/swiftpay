@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SwiftPay Buy BPC</title>
+
+<link rel="stylesheet" href="../../assets/css/theme.css">
+
+<style>
+body{background:#f4fbff;}
+.container{max-width:420px;margin:0 auto;padding:20px;}
+.card{background:white;padding:20px;border-radius:18px;margin-top:40px;
+box-shadow:0 10px 25px rgba(0,0,0,0.05);}
+h2{color:#0ea5e9;}
+input{width:100%;padding:14px;border-radius:12px;border:1px solid #e5f3ff;
+background:#f8fbff;margin-top:10px;}
+button{width:100%;padding:14px;margin-top:15px;border:none;border-radius:12px;
+background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:white;font-weight:700;}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card">
+
+    <h2>Buy BPC Code</h2>
+
+    <input id="amount" type="number" placeholder="Enter amount (₦)" />
+
+    <button onclick="next()">Continue</button>
+
+  </div>
+
+</div>
+
+<script>
+const token = localStorage.getItem("token");
+
+if(!token){
+  window.location = "../login.html";
+}
+
+function next(){
+  if(!amount.value){
+    alert("Enter amount");
+    return;
+  }
+
+  localStorage.setItem("bpc_amount", amount.value);
+  window.location = "confirm.html";
+}
+</script>
+
+</body>
+</html>
