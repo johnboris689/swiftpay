@@ -1,15 +1,11 @@
 const express = require("express");
 const path = require("path");
+
 const app = express();
 
-/* IMPORTANT: FORCE CORRECT ABSOLUTE PATH */
-const root = path.resolve(__dirname, "..");
-
-const pages = path.join(root, "pages");
-const assets = path.join(root, "assets");
+const pages = path.join(__dirname, "pages");
 
 app.use(express.static(pages));
-app.use("/assets", express.static(assets));
 
 app.get("/", (req,res)=>{
   res.sendFile(path.join(pages,"login.html"));
@@ -27,13 +23,16 @@ app.get("/dashboard",(req,res)=>{
   res.sendFile(path.join(pages,"dashboard.html"));
 });
 
-/* TEST ROUTE */
 app.get("/api/test",(req,res)=>{
-  res.json({status:"SwiftPay OK"});
+  res.json({
+    status:"SwiftPay OK",
+    pages
+  });
 });
 
-/* FORCE RENDER PORT */
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT,()=>{
-  console.log("SwiftPay FIXED RUNNING ON", PORT);
+  console.log("SwiftPay running on", PORT);
+  console.log("Pages directory:", pages);
 });
