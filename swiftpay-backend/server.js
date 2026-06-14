@@ -1,44 +1,39 @@
 const express = require("express");
 const path = require("path");
-const cors = require("cors");
-
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+/* IMPORTANT: FORCE CORRECT ABSOLUTE PATH */
+const root = path.resolve(__dirname, "..");
 
-/* ================= FRONTEND SERVE ================= */
-app.use(express.static(path.join(__dirname, "../pages")));
-app.use("/assets", express.static(path.join(__dirname, "../assets")));
+const pages = path.join(root, "pages");
+const assets = path.join(root, "assets");
 
-/* ================= ROUTES ================= */
+app.use(express.static(pages));
+app.use("/assets", express.static(assets));
+
 app.get("/", (req,res)=>{
-  res.sendFile(path.join(__dirname,"../pages/login.html"));
+  res.sendFile(path.join(pages,"login.html"));
 });
 
 app.get("/login",(req,res)=>{
-  res.sendFile(path.join(__dirname,"../pages/login.html"));
+  res.sendFile(path.join(pages,"login.html"));
 });
 
 app.get("/register",(req,res)=>{
-  res.sendFile(path.join(__dirname,"../pages/register.html"));
+  res.sendFile(path.join(pages,"register.html"));
 });
 
 app.get("/dashboard",(req,res)=>{
-  res.sendFile(path.join(__dirname,"../pages/dashboard.html"));
+  res.sendFile(path.join(pages,"dashboard.html"));
 });
 
-/* ================= API STATUS ================= */
-app.get("/api/status",(req,res)=>{
-  res.json({
-    status:"SwiftPay FULL APP LIVE",
-    time:new Date().toISOString()
-  });
+/* TEST ROUTE */
+app.get("/api/test",(req,res)=>{
+  res.json({status:"SwiftPay OK"});
 });
 
-/* ================= START ================= */
+/* FORCE RENDER PORT */
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT,()=>{
-  console.log("SwiftPay FULL FRONTEND MODE ACTIVE");
+  console.log("SwiftPay FIXED RUNNING ON", PORT);
 });
