@@ -2,7 +2,7 @@ async function refreshDashboard(){
   const token = localStorage.getItem("token");
 
   if(!token){
-    window.location="login.html";
+    
     return;
   }
 
@@ -13,7 +13,7 @@ async function refreshDashboard(){
 
     if(!res.ok){
       localStorage.removeItem("token");
-      window.location="login.html";
+      
       return;
     }
 

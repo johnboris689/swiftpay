@@ -3,41 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Processing</title>
+<title>Processing Payment - SwiftPay</title>
+
 <style>
 body{
   margin:0;
   font-family:system-ui;
-  background:#0ea5e9;
-  color:white;
+  background:linear-gradient(135deg,#eaf7ff,#f4fbff);
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
+}
+
+.card{
+  width:90%;
+  max-width:420px;
+  background:white;
+  border-radius:22px;
+  padding:25px;
   text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,0.08);
+}
+
+.loader{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  border:6px solid #e6f0f7;
+  border-top:6px solid #0ea5e9;
+  margin:20px auto;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+
+h2{color:#0ea5e9;}
+
+.count{
+  font-size:40px;
+  font-weight:900;
+  color:#0ea5e9;
 }
 </style>
 </head>
+
 <body>
 
-<div>
-<h1>Processing Payment</h1>
-<h2 id="t">10</h2>
+<div class="card">
+
+  <h2>Processing Payment</h2>
+
+  <div class="loader"></div>
+
+  <div class="count" id="count">10</div>
+
+  <p id="status">Preparing transaction...</p>
+
 </div>
 
 <script>
-let t=10;
+let time = 10;
 
-const orderId=sessionStorage.getItem("orderId");
+const status = document.getElementById("status");
+const count = document.getElementById("count");
 
-setInterval(()=>{
-  t--;
-  document.getElementById("t").innerText=t;
+const interval = setInterval(()=>{
 
-  if(t<=0){
-    window.location="bank.html";
+  time--;
+  count.innerText = time;
+
+  if(time === 7){
+    status.innerText = "Verifying wallet balance...";
   }
-},1000);
+
+  if(time === 4){
+    status.innerText = "Processing debit transaction...";
+  }
+
+  if(time === 2){
+    status.innerText = "Finalizing BPC purchase...";
+  }
+
+  if(time <= 0){
+    clearInterval(interval);
+
+    // CALL WALLET ENGINE
+    fetch("/api/transaction",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        email: email,
+        type: "debit",
+        amount: 10000
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+      if(data.message === "Success"){
+        status.innerText = "Payment Successful! Redirecting...";
+        setTimeout(()=>{
+          window.location.href = "result.html";
+        }, 1200);
+      } else {
+        status.innerText = data.message || "Payment Failed";
+        setTimeout(()=>{
+          window.location.href = "buy.html";
+        }, 2000);
+      }
+
+    })
+    .catch(()=>{
+      status.innerText = "Network Error";
+    });
+
+  }
+
+}, 1000);
 </script>
 
 </body>
