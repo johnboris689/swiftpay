@@ -9,52 +9,50 @@
 body{
   margin:0;
   font-family:system-ui;
-  background:linear-gradient(135deg,#38bdf8,#0ea5e9);
-  color:white;
-}
-
-/* top bar */
-.top{
-  padding:18px;
+  background: linear-gradient(135deg,#38bdf8,#0ea5e9);
+  height:100vh;
   display:flex;
-  justify-content:space-between;
+  justify-content:center;
   align-items:center;
-  font-weight:600;
 }
 
-/* center content */
-.container{
-  max-width:420px;
-  margin:auto;
-  padding:20px;
+/* card */
+.card{
+  width:90%;
+  max-width:380px;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  border-radius:24px;
+  padding:25px;
+  color:white;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
 }
 
-/* title */
 h1{
+  margin:0;
   font-size:34px;
-  margin-top:30px;
 }
 
 p{
+  font-size:13px;
   opacity:0.9;
-  font-size:14px;
-  line-height:1.5;
+  line-height:1.4;
 }
 
-/* form */
+/* inputs */
 input{
   width:100%;
   padding:14px;
   margin-top:12px;
-  border-radius:12px;
   border:none;
+  border-radius:14px;
   outline:none;
-  background:rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.18);
   color:white;
 }
 
 input::placeholder{
-  color:#e8f7ff;
+  color:#e6f7ff;
 }
 
 /* button */
@@ -70,44 +68,32 @@ button{
   font-size:16px;
 }
 
-/* footer text */
 .footer{
   text-align:center;
-  margin-top:18px;
-  font-size:14px;
+  margin-top:12px;
+  font-size:13px;
 }
 
 a{
   color:white;
   font-weight:700;
+  text-decoration:underline;
 }
 </style>
-
 </head>
 
 <body>
 
-<div class="top">
-  <span>←</span>
-  <span>You Need Help?</span>
-</div>
-
-<div class="container">
+<div class="card">
 
   <h1>SWIFTPAY</h1>
-  <h2>Welcome!</h2>
-
   <p>
-    Get your account ready and instantly start buying, selling airtime and data online and start paying all your bills in cheaper price.
+    Get your account ready instantly and start buying airtime, data and paying bills easily.
   </p>
 
-  <input id="name" type="text" placeholder="Your Full Name">
-  <input id="email" type="email" placeholder="Your Email">
+  <input id="name" placeholder="Your Full Name">
+  <input id="email" placeholder="Your Email">
   <input id="password" type="password" placeholder="Password">
-
-  <p style="font-size:12px;opacity:0.85;">
-    Any further actions indicates that you agree with our terms & conditions!
-  </p>
 
   <button onclick="register()">Create account</button>
 
@@ -118,52 +104,23 @@ a{
 </div>
 
 <script>
-const API = "/api";
+function register(){
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-async function register(){
-  try{
-    const name=document.getElementById("name");
-    const email=document.getElementById("email");
-    const password=document.getElementById("password");
-
-    if(!name.value.trim()||!email.value.trim()||!password.value.trim()){
-      alert("All fields required");
-      return;
-    }
-
-    console.log("Register clicked");
-
-    const res=await fetch("/api/register",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        name:name.value.trim(),
-        email:email.value.trim(),
-        password:password.value
-      })
-    });
-
-    const data=await res.json();
-
-    console.log("Response:",data);
-
-    if(res.ok){
-      alert("Account created successfully");
-      window.location.href="login.html";
-    }else{
-      alert(data.message||"Registration failed");
-    }
-
-  }catch(err){
-    console.log("ERROR:",err);
-    alert("Network or server error: "+err.message);
+  if(!name || !email || !password){
+    alert("All fields required");
+    return;
   }
-}
-  const res=await fetch(API+"/register",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:name.value.trim(),email:email.value.trim(),password:password.value})});
-  const data=await res.json();
-  if(res.ok){alert("Account created successfully");window.location.href="login.html";}else{alert(data.message||"Registration failed");}
+
+  localStorage.setItem("swiftpay_user", JSON.stringify({name,email}));
+
+  alert("Account created successfully");
+
+  window.location.href = "dashboard.html";
 }
 </script>
 
-<script src="notify.js"></script><script src="nav.js"></script></body>
+</body>
 </html>
