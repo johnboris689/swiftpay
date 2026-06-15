@@ -3,224 +3,257 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SwiftPay Dashboard</title>
+<title>SwiftPay Dashboard V3</title>
 
 <style>
 body{
   margin:0;
   font-family:system-ui;
-  background:#f4fbff;
-  animation: fadeIn 0.6s ease;
+  background:linear-gradient(180deg,#eaf7ff,#f4fbff);
+  padding-bottom:90px;
+  animation:fadeBody 0.6s ease;
 }
 
-/* PAGE FADE */
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(10px);}
-  to{opacity:1; transform:translateY(0);}
+@keyframes fadeBody{
+  from{opacity:0;}
+  to{opacity:1;}
 }
 
-/* TOP BAR */
-.topbar{
+/* HEADER */
+.header{
   background:linear-gradient(135deg,#38bdf8,#0ea5e9);
-  padding:25px;
   color:white;
-  border-bottom-left-radius:25px;
-  border-bottom-right-radius:25px;
+  padding:25px 20px;
+  border-bottom-left-radius:30px;
+  border-bottom-right-radius:30px;
+  animation:slideDown 0.6s ease;
 }
 
-/* CONTAINER */
-.container{
-  padding:15px;
-  animation: slideUp 0.6s ease;
+@keyframes slideDown{
+  from{transform:translateY(-20px);opacity:0;}
+  to{transform:translateY(0);opacity:1;}
 }
 
-@keyframes slideUp{
-  from{opacity:0; transform:translateY(20px);}
-  to{opacity:1; transform:translateY(0);}
-}
+.header h2{margin:0;}
+.header p{opacity:0.9;font-size:13px;}
 
-/* BALANCE */
-.balanceCard{
+/* BALANCE CARD */
+.card{
   background:white;
+  margin:20px;
   padding:20px;
-  border-radius:18px;
-  margin-top:-25px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.08);
-  transition:0.3s ease;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+  animation:pop 0.6s ease;
+  position:relative;
+  overflow:hidden;
 }
 
-.balanceCard:hover{
-  transform:scale(1.02);
+@keyframes pop{
+  from{transform:scale(0.9);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+
+.card::after{
+  content:"";
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:radial-gradient(circle,rgba(14,165,233,0.1),transparent);
+  animation:glow 4s infinite linear;
+}
+
+@keyframes glow{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
 }
 
 .balance{
-  font-size:32px;
+  font-size:34px;
   font-weight:900;
   color:#0ea5e9;
+  transition:0.5s;
 }
 
-/* CARD */
-.card{
+/* QUICK ACTIONS */
+.actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:20px;
+}
+
+.action{
   background:white;
   padding:15px;
-  border-radius:15px;
-  margin-top:15px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.06);
-  transition:0.3s ease;
+  border-radius:18px;
+  text-align:center;
+  font-size:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.05);
+  transition:all 0.25s ease;
+  cursor:pointer;
+  transform:translateY(0);
 }
 
-.card:hover{
-  transform:translateY(-3px);
+.action:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 25px rgba(0,0,0,0.08);
+}
+
+.action:active{
+  transform:scale(0.95);
+}
+
+/* TRANSACTIONS */
+.tx{
+  margin:20px;
+  background:white;
+  padding:15px;
+  border-radius:20px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.05);
+  animation:fadeInUp 0.7s ease;
+}
+
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.tx-item{
+  padding:10px;
+  border-bottom:1px solid #eee;
+  animation:fadeItem 0.4s ease;
+}
+
+@keyframes fadeItem{
+  from{opacity:0;transform:translateX(-10px);}
+  to{opacity:1;transform:translateX(0);}
 }
 
 /* BOTTOM NAV */
 .nav{
   position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:70px;
+  bottom:10px;
+  left:10px;
+  right:10px;
   background:white;
   display:flex;
   justify-content:space-around;
-  align-items:center;
-  box-shadow:0 -5px 20px rgba(0,0,0,0.08);
-  border-top-left-radius:18px;
-  border-top-right-radius:18px;
-  animation: navUp 0.6s ease;
+  padding:12px;
+  border-radius:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  animation:floatNav 0.8s ease;
 }
 
-@keyframes navUp{
-  from{transform:translateY(60px);}
-  to{transform:translateY(0);}
+@keyframes floatNav{
+  from{transform:translateY(100px);opacity:0;}
+  to{transform:translateY(0);opacity:1;}
 }
 
-/* NAV ITEM */
-.nav-item{
+.nav div{
+  font-size:12px;
   text-align:center;
-  font-size:11px;
-  color:gray;
+  color:#666;
   cursor:pointer;
-  width:20%;
-  transition:0.2s ease;
+  transition:0.2s;
 }
 
-.nav-item:active{
-  transform:scale(0.9);
-}
-
-/* ACTIVE */
-.active{
+.nav div:hover{
   color:#0ea5e9;
-  font-weight:700;
+  transform:scale(1.1);
 }
 
-/* ICON */
-.icon{
-  width:22px;
-  height:22px;
-  display:block;
-  margin:0 auto 3px auto;
-  fill:currentColor;
-}
-
-/* BUTTON TAP EFFECT */
-.tap{
-  transition:0.2s ease;
-}
-
-.tap:active{
-  transform:scale(0.92);
+.nav div:active{
+  transform:scale(0.9);
 }
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
+<div class="header">
   <h2>SwiftPay</h2>
   <p>Welcome back 👋</p>
 </div>
 
-<div class="container">
-
-  <div class="balanceCard">
-    <p style="font-size:12px;color:gray;">Available Balance</p>
-    <div class="balance">₦200,000</div>
-    <p id="user">Loading...</p>
-  </div>
-
-  <div class="card">
-    <h3>Recent Transactions</h3>
-    <p style="color:gray;font-size:12px;">No transactions yet</p>
-  </div>
-
+<div class="card">
+  <p>Available Balance</p>
+  <div class="balance" id="balance">₦0</div>
 </div>
 
-<!-- BOTTOM NAV -->
+<div class="actions">
+  <div class="action" onclick="go('airtime')">📱 Airtime</div>
+  <div class="action" onclick="go('data')">🌐 Data</div>
+  <div class="action" onclick="go('bpc')">💳 BPC</div>
+  <div class="action" onclick="go('wallet')">💰 Wallet</div>
+  <div class="action" onclick="go('profile')">👤 Profile</div>
+  <div class="action" onclick="go('support')">💬 Support</div>
+</div>
+
+<div class="tx">
+  <h3>Recent Transactions</h3>
+  <div id="txns"></div>
+</div>
+
 <div class="nav">
-
-  <div class="nav-item active tap" onclick="go('home')">
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3z"/>
-    </svg>
-    Home
-  </div>
-
-  <div class="nav-item tap" onclick="go('bpc')">
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="M3 6h18v4H3V6zm0 6h18v6H3v-6z"/>
-    </svg>
-    BPC
-  </div>
-
-  <div class="nav-item tap" onclick="go('airtime')">
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="M7 2h10v20H7z"/>
-    </svg>
-    Airtime
-  </div>
-
-  <div class="nav-item tap" onclick="go('data')">
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="M4 4h16v16H4z"/>
-    </svg>
-    Data
-  </div>
-
-  <div class="nav-item tap" onclick="go('withdraw')">
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="M12 2l4 7h-3v7h-2V9H8z"/>
-    </svg>
-    Withdraw
-  </div>
-
+  <div onclick="go('dashboard')">Home</div>
+  <div onclick="go('wallet')">Wallet</div>
+  <div onclick="go('bpc')">BPC</div>
+  <div onclick="go('profile')">Profile</div>
 </div>
 
 <script>
 function go(page){
-  const routes = {
-    home: "dashboard.html",
-    bpc: "bpc/index.html",
-    airtime: "airtime.html",
-    data: "data.html",
-    withdraw: "withdraw.html"
-  };
-
-  // smooth transition effect
-  document.body.style.opacity = "0.4";
-
-  setTimeout(()=>{
-    window.location.href = routes[page] || "dashboard.html";
-  },150);
+  window.location.href = page + ".html";
 }
 
-/* USER */
-const user = JSON.parse(localStorage.getItem("swiftpay_user") || "{}");
-document.getElementById("user").innerText =
-  user.name ? "Hi, " + user.name : "Welcome User";
+/* ANIMATED BALANCE */
+function animateBalance(value){
+  let el = document.getElementById("balance");
+  let start = 0;
+  let end = value;
+  let step = Math.ceil(end / 30);
+
+  let interval = setInterval(()=>{
+    start += step;
+    if(start >= end){
+      start = end;
+      clearInterval(interval);
+    }
+    el.innerText = "₦" + start;
+  },20);
+}
+
+async function load(){
+  const res = await fetch("/api/wallet", {
+    headers:{Authorization:localStorage.getItem("token")}
+  });
+
+  if(res.ok){
+    const data = await res.json();
+    animateBalance(data.balance);
+  }
+
+  const tx = await fetch("/api/transactions", {
+    headers:{Authorization:localStorage.getItem("token")}
+  });
+
+  if(tx.ok){
+    const list = await tx.json();
+    document.getElementById("txns").innerHTML =
+      list.slice(0,5).map(t =>
+        `<div class="tx-item">
+          <b>${t.type}</b><br>
+          <small>${new Date(t.date).toLocaleString()}</small>
+        </div>`
+      ).join("");
+  }
+}
+
+load();
 </script>
 
-<script src="notify.js"></script>
 </body>
 </html>
