@@ -108,12 +108,12 @@ const interval = setInterval(()=>{
 
       if(data.message === "Success"){
         status.innerText = "Payment Successful! Redirecting...";
-        setTimeout(()=>{
+        let t=10;const i=setInterval(()=>{t--;document.getElementById("count").innerText=t;if(t<=0){clearInterval(i);window.location.href="result.html";}},1000);=>{
           window.location.href = "result.html";
         }, 1200);
       } else {
         status.innerText = data.message || "Payment Failed";
-        setTimeout(()=>{
+        let t=10;const i=setInterval(()=>{t--;document.getElementById("count").innerText=t;if(t<=0){clearInterval(i);window.location.href="result.html";}},1000);=>{
           window.location.href = "buy.html";
         }, 2000);
       }

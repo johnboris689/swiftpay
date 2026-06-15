@@ -111,14 +111,14 @@ button:active{
   <input id="name" placeholder="Full Name">
   <input id="email" placeholder="Email Address">
 
-  <button onclick="pay()">Pay & Get BPC Code</button>
+  <button onclick="startBPC()">Pay & Get BPC Code</button>
 
   <div class="loading" id="loading">Processing payment...</div>
 
 </div>
 
 <script>
-function pay(){
+localStorage.setItem("bpc_tx",Date.now());window.location.href="countdown.html";
 
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;

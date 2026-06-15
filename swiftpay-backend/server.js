@@ -138,4 +138,14 @@ app.get("/dashboard", (req,res)=>res.sendFile(path.join(pages,"dashboard.html"))
 
 /* ========================= */
 const PORT = process.env.PORT || 10000;
+app.post("/api/bpc/buy", auth, (req,res)=>{
+const user = users.find(u=>u.id===req.user.id);
+const price=10000;
+if(user.balance<price){return res.status(400).json({message:"Insufficient balance"});}
+user.balance-=price;
+const tx={id:Date.now(),userId:user.id,status:"processing",amount:price};
+if(!global.bpc) global.bpc=[];
+global.bpc.push(tx);
+res.json({transactionId:tx.id});
+});
 app.listen(PORT,()=>console.log("SwiftPay AUTH SYSTEM RUNNING",PORT));

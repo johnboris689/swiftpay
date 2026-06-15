@@ -128,5 +128,9 @@ function goWhatsApp(){
 }
 </script>
 
+<script>
+const d=JSON.parse(localStorage.getItem("bpc_result")||"{}");
+document.body.innerHTML+="<h3>Status: "+(d.status||"SUCCESS")+"</h3><p>Amount: ₦"+(d.amount||10000)+"</p>";
+</script>
 </body>
 </html>
