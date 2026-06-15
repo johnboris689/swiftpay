@@ -7,46 +7,44 @@
 
 <style>
 body{
-  margin:0;
-  font-family:system-ui;
-  background:linear-gradient(135deg,#eaf7ff,#f4fbff);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
+margin:0;
+font-family:system-ui;
+background:linear-gradient(135deg,#eaf7ff,#f4fbff);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
 .card{
-  width:90%;
-  max-width:420px;
-  background:white;
-  border-radius:22px;
-  padding:25px;
-  text-align:center;
-  box-shadow:0 15px 40px rgba(0,0,0,0.08);
+width:90%;
+max-width:420px;
+background:white;
+border-radius:22px;
+padding:25px;
+text-align:center;
+box-shadow:0 15px 40px rgba(0,0,0,.08);
 }
 
 .loader{
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  border:6px solid #e6f0f7;
-  border-top:6px solid #0ea5e9;
-  margin:20px auto;
-  animation:spin 1s linear infinite;
+width:70px;
+height:70px;
+border-radius:50%;
+border:6px solid #e6f0f7;
+border-top:6px solid #0ea5e9;
+margin:20px auto;
+animation:spin 1s linear infinite;
 }
 
 @keyframes spin{
-  from{transform:rotate(0deg);}
-  to{transform:rotate(360deg);}
+from{transform:rotate(0deg);}
+to{transform:rotate(360deg);}
 }
 
-h2{color:#0ea5e9;}
-
 .count{
-  font-size:40px;
-  font-weight:900;
-  color:#0ea5e9;
+font-size:42px;
+font-weight:900;
+color:#0ea5e9;
 }
 </style>
 </head>
@@ -54,78 +52,44 @@ h2{color:#0ea5e9;}
 <body>
 
 <div class="card">
+<h2>Processing Payment</h2>
 
-  <h2>Processing Payment</h2>
+<div class="loader"></div>
 
-  <div class="loader"></div>
+<div class="count" id="count">10</div>
 
-  <div class="count" id="count">10</div>
-
-  <p id="status">Preparing transaction...</p>
-
+<p id="status">Preparing transaction...</p>
 </div>
 
 <script>
-let time = 10;
+let time=10;
 
-const status = document.getElementById("status");
-const count = document.getElementById("count");
+const count=document.getElementById("count");
+const status=document.getElementById("status");
 
-const interval = setInterval(()=>{
+const timer=setInterval(()=>{
 
-  time--;
-  count.innerText = time;
+time--;
+count.innerText=time;
 
-  if(time === 7){
-    status.innerText = "Verifying wallet balance...";
-  }
+if(time===7){
+status.innerText="Verifying payment...";
+}
 
-  if(time === 4){
-    status.innerText = "Processing debit transaction...";
-  }
+if(time===4){
+status.innerText="Generating BPC details...";
+}
 
-  if(time === 2){
-    status.innerText = "Finalizing BPC purchase...";
-  }
+if(time===2){
+status.innerText="Finalizing...";
+}
 
-  if(time <= 0){
-    clearInterval(interval);
+if(time<=0){
+clearInterval(timer);
+window.location.href="bank.html";
+}
 
-    // CALL WALLET ENGINE
-    fetch("/api/transaction",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({
-        email: email,
-        type: "debit",
-        amount: 10000
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-
-      if(data.message === "Success"){
-        status.innerText = "Payment Successful! Redirecting...";
-        let t=10;const i=setInterval(()=>{t--;document.getElementById("count").innerText=t;if(t<=0){clearInterval(i);window.location.href="result.html";}},1000);=>{
-          window.location.href = "result.html";
-        }, 1200);
-      } else {
-        status.innerText = data.message || "Payment Failed";
-        let t=10;const i=setInterval(()=>{t--;document.getElementById("count").innerText=t;if(t<=0){clearInterval(i);window.location.href="result.html";}},1000);=>{
-          window.location.href = "buy.html";
-        }, 2000);
-      }
-
-    })
-    .catch(()=>{
-      status.innerText = "Network Error";
-    });
-
-  }
-
-}, 1000);
+},1000);
 </script>
 
 </body>
