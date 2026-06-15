@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SwiftPay Wallet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:system-ui;background:#f4fbff;padding:20px}
+.card{background:white;padding:20px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,.08)}
+.balance{font-size:36px;font-weight:900;color:#0ea5e9}
+button{width:100%;padding:14px;margin-top:15px;background:#0ea5e9;color:white;border:none;border-radius:12px}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>My Wallet</h2>
+<div class="balance" id="balance">₦0</div>
+<button onclick="window.location='withdraw.html'">Withdraw</button>
+</div>
+
+<script>
+fetch('/api/wallet',{
+headers:{Authorization:localStorage.getItem('token')}
+})
+.then(r=>r.json())
+.then(d=>{
+document.getElementById('balance').innerText='₦'+(d.balance||0).toLocaleString();
+});
+</script>
+</body>
+</html>
