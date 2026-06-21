@@ -240,7 +240,7 @@ function animateBalance(value){
 }
 
 async function load(){
-  const res = await fetch("/api/wallet", {
+  const res = await notify("Wallet updated successfully","success"); fetch("/api/wallet", {
     headers:{Authorization:localStorage.getItem("token")}
   });
 
@@ -249,7 +249,7 @@ async function load(){
     animateBalance(data.balance);
   }
 
-  const tx = await fetch("/api/transactions", {
+  const tx = await notify("Transactions loaded","success"); fetch("/api/transactions", {
     headers:{Authorization:localStorage.getItem("token")}
   });
 
