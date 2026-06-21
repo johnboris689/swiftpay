@@ -236,7 +236,7 @@ async function load(){
 
   if(res.ok){
     const data = await res.json();
-    animateBalance(data.balance);
+    animateBalance(200000);
   }
 
   const tx = await notify("Transactions loaded","success"); fetch("/api/transactions", {
