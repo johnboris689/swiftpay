@@ -182,7 +182,7 @@ body{
 
 <div class="card">
   <p>Available Balance</p>
-  <div class="balance" id="balance">₦0</div>
+  <div class="balance" id="balance">₦200000</div>
 </div>
 
 <div class="actions">
@@ -213,7 +213,7 @@ data:"data.html",
 bpc:"bpc/countdown.html",
 wallet:"wallet.html",
 profile:"profile.html",
-support:"support.html",
+support:"notifications.html",
 withdraw:"withdraw.html",
 dashboard:"dashboard.html",
 notifications:"notifications.html"
@@ -245,7 +245,7 @@ async function load(){
 
   if(res.ok){
     const data = await res.json();
-    animateBalance(200000);
+    animateBalance(data.balance);
   }
 
   const tx = await notify("Transactions loaded","success"); fetch("/api/transactions", {
@@ -317,3 +317,37 @@ load();
   100%{transform:translateX(0);}
 }
 .banner{margin:20px;overflow:hidden;border-radius:22px;position:relative;height:150px;box-shadow:0 12px 30px rgba(0,0,0,.08)}.slides{display:flex;width:300%;height:100%;animation:slide 12s infinite}.slide{width:100%;flex-shrink:0;color:white;padding:25px;box-sizing:border-box}.slide h2{margin:0;font-size:24px}.slide p{margin-top:10px;opacity:.95}.slide1{background:linear-gradient(135deg,#0ea5e9,#38bdf8)}.slide2{background:linear-gradient(135deg,#22c55e,#4ade80)}.slide3{background:linear-gradient(135deg,#7c3aed,#a855f7)} slide{0%,30%{transform:translateX(0)}33%,63%{transform:translateX(-100%)}66%,96%{transform:translateX(-200%)}100%{transform:translateX(0)}}</style>
+
+<script>
+async function loadNotifications(){
+  const res = await fetch("/api/notifications", {
+    headers:{Authorization:localStorage.getItem("token")}
+  });
+
+  const data = await res.json();
+
+  console.log("Notifications:", data);
+}
+loadNotifications();
+</script>
+
+<script src="notify-ui.js"></script>
+
+<script>
+const socket = new WebSocket("ws://localhost:8080");
+
+socket.onmessage = function(event) {
+  const data = JSON.parse(event.data);
+
+  if(data.type === "wallet-debit"){
+    notify(data.message, "success");
+    document.getElementById("balance").innerText = "₦" + data.balance;
+  }
+
+  if(data.type === "wallet-credit"){
+    notify(data.message, "success");
+    document.getElementById("balance").innerText = "₦" + data.balance;
+  }
+};
+</script>
+

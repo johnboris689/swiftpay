@@ -1,151 +1,72 @@
 const express = require("express");
-const path = require("path");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-
 const app = express();
 app.use(express.json());
 
-const SECRET = "swiftpay_secret_key";
+let wallets = {}; 
+let transactions = {};
 
-const pages = path.join(__dirname, "pages");
-app.use(express.static(pages));
-
-/* =========================
-   SIMPLE DATABASE (TEMP)
-========================= */
-let users = [];
-
-/* =========================
-   REGISTER
-========================= */
-app.post("/api/register", async (req,res)=>{
-  const {name,email,password} = req.body;
-
-  if(!name || !email || !password){
-    return res.status(400).json({message:"All fields required"});
+// INIT WALLET
+function getWallet(user){
+  if(!wallets[user]){
+    wallets[user] = { balance: 200000 };
+    transactions[user] = [];
   }
-
-  const exists = users.find(u=>u.email === email);
-  if(exists){
-    return res.status(400).json({message:"User already exists"});
-  }
-
-  const hashed = await bcrypt.hash(password,10);
-
-  const user = {
-    id: Date.now(),
-    name,
-    email,
-    password: hashed,
-    balance: 200000
-  };
-
-  users.push(user);
-
-  res.json({message:"Registered successfully"});
-});
-
-/* =========================
-   LOGIN
-========================= */
-app.post("/api/login", async (req,res)=>{
-  const {email,password} = req.body;
-
-  const user = users.find(u=>u.email === email);
-  if(!user){
-    return res.status(400).json({message:"Invalid credentials"});
-  }
-
-  const ok = await bcrypt.compare(password, user.password);
-  if(!ok){
-    return res.status(400).json({message:"Invalid credentials"});
-  }
-
-  const token = jwt.sign(
-    {id:user.id,email:user.email},
-    SECRET,
-    {expiresIn:"7d"}
-  );
-
-  res.json({
-    message:"Login successful",
-    token,
-    user:{
-      name:user.name,
-      email:user.email,
-      balance:user.balance
-    }
-  });
-});
-
-/* =========================
-   AUTH MIDDLEWARE
-========================= */
-function auth(req,res,next){
-  const token = req.headers.authorization;
-
-  if(!token){
-    return res.status(401).json({message:"No token"});
-  }
-
-  try{
-    const decoded = jwt.verify(token, SECRET);
-    req.user = decoded;
-    next();
-  }catch(e){
-    return res.status(401).json({message:"Invalid token"});
-  }
+  return wallets[user];
 }
 
-/* =========================
-   WALLET (PROTECTED)
-========================= */
-app.get("/api/wallet", auth, (req,res)=>{
-  const user = users.find(u=>u.id === req.user.id);
-  res.json({balance:user.balance});
+// GET WALLET
+app.get("/api/wallet", (req,res)=>{
+  const user = "default";
+  res.json(getWallet(user));
 });
 
-app.post("/api/transaction", auth, (req,res)=>{
-  const {type,amount} = req.body;
+// TRANSACTIONS
+app.get("/api/transactions", (req,res)=>{
+  const user = "default";
+  res.json(transactions[user] || []);
+});
 
-  const user = users.find(u=>u.id === req.user.id);
+// DEBIT WALLET (AIRTIME/DATA/BPC)
+app.post("/api/transaction", (req,res)=>{
+  const { type, amount } = req.body;
+  const user = "default";
 
-  if(type === "debit"){
-    if(user.balance < amount){
-      return res.status(400).json({message:"Insufficient balance"});
-    }
-    user.balance -= amount;
+  const wallet = getWallet(user);
+
+  if(wallet.balance < amount){
+    return res.json({ message: "Insufficient Balance" });
   }
 
-  if(type === "credit"){
-    user.balance += amount;
-  }
+  wallet.balance -= amount;
 
-  res.json({
-    message:"Success",
-    balance:user.balance
+  transactions[user].unshift({
+    type,
+    amount,
+    date: new Date()
   });
+
+  return res.json({ message: "Success", balance: wallet.balance });
 });
 
-/* =========================
-   PAGES (NO AUTO REDIRECTS)
-========================= */
-app.get("/", (req,res)=>res.sendFile(path.join(pages,"login.html")));
-app.get("/login", (req,res)=>res.sendFile(path.join(pages,"login.html")));
-app.get("/register", (req,res)=>res.sendFile(path.join(pages,"register.html")));
-app.get("/dashboard", (req,res)=>res.sendFile(path.join(pages,"dashboard.html")));
+app.listen(5000, ()=>console.log("SwiftPay Wallet Engine Running"));
+require('./wallet-api');
 
-/* ========================= */
-const PORT = process.env.PORT || 10000;
-app.post("/api/bpc/buy", auth, (req,res)=>{
-const user = users.find(u=>u.id===req.user.id);
-const price=10000;
-if(user.balance<price){return res.status(400).json({message:"Insufficient balance"});}
-user.balance-=price;
-const tx={id:Date.now(),userId:user.id,status:"processing",amount:price};
-if(!global.bpc) global.bpc=[];
-global.bpc.push(tx);
-res.json({transactionId:tx.id});
-});
-app.listen(PORT,()=>console.log("SwiftPay AUTH SYSTEM RUNNING",PORT));
+const airtime = require('./airtime-api');
+const data = require('./data-api');
+const bpc = require('./bpc-api');
+
+app.use('/api', airtime);
+app.use('/api', data);
+app.use('/api', bpc);
+
+
+const notif = require('./notification-api');
+const admin = require('./admin-api');
+
+app.use('/api', notif);
+app.use('/api', admin);
+
+
+const ws = require('./ws-server');
+global.broadcast = ws.broadcast;
+
